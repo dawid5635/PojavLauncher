@@ -77,6 +77,7 @@ public class CustomControlsActivity extends AppCompatActivity
 		// Generate and save default control
 		try {
 			generateDefaultControlMap();
+			ctrlLayout.loadLayout(mCtrl);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -100,7 +101,13 @@ public class CustomControlsActivity extends AppCompatActivity
 	}
 	
 	private void setDefaultControlJson(String path) {
-		mPref.edit().putString("defaultCtrl", path).commit();
+		try {
+			// Load before save to make sure control is not error
+			ctrlLayout.loadLayout(new Gson().fromJson(Tools.read(path), CustomControls.class));
+			mPref.edit().putString("defaultCtrl", path).commit();
+		} catch (Throwable th) {
+			Tools.showError(this, th);
+		}
 	}
 	
 	private void dialogSelectDefaultCtrl() {
@@ -222,6 +229,8 @@ public class CustomControlsActivity extends AppCompatActivity
 	
 	private void generateDefaultControlMap() throws Exception {
 		List<ControlButton> btn = mCtrl.button;
+		btn.clear();
+		
 		btn.add(ControlButton.getSpecialButtons()[0].clone()); // Keyboard
 		btn.add(ControlButton.getSpecialButtons()[1].clone()); // GUI
 		btn.add(ControlButton.getSpecialButtons()[2].clone()); // Primary Mouse button
@@ -240,8 +249,6 @@ public class CustomControlsActivity extends AppCompatActivity
 		btn.add(new ControlButton(this, R.string.control_inventory, KeyEvent.KEYCODE_E, ControlButton.pixelOf2dp * 3 + ControlButton.pixelOf50dp * 2, AndroidDisplay.windowHeight - ControlButton.pixelOf2dp - ControlButton.pixelOf50dp, true));
 		btn.add(new ControlButton(this, R.string.control_shift, KeyEvent.KEYCODE_SHIFT_LEFT, ControlButton.pixelOf2dp * 2 + ControlButton.pixelOf50dp, AndroidDisplay.windowHeight - ControlButton.pixelOf2dp * 2 - ControlButton.pixelOf50dp * 2, true));
 		btn.add(new ControlButton(this, R.string.control_jump, KeyEvent.KEYCODE_SPACE, AndroidDisplay.windowWidth - ControlButton.pixelOf2dp * 3 - ControlButton.pixelOf50dp * 2, AndroidDisplay.windowHeight - ControlButton.pixelOf2dp * 2 - ControlButton.pixelOf50dp * 2, true));
-		
-		ctrlLayout.loadLayout(mCtrl);
 		
 		// Save to default control json
 		doSaveCtrl("default");

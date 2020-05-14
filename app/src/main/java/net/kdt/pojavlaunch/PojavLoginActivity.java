@@ -41,7 +41,7 @@ public class PojavLoginActivity extends MineActivity
 	private SharedPreferences firstLaunchPrefs;
 	private String PREF_IS_DONOTSHOWAGAIN_WARN = "isWarnDoNotShowAgain";
 	private String PREF_IS_INSTALLED_LIBRARIES = "isLibrariesExtracted";
-	private String PREF_IS_INSTALLED_OPENJDK = "isOpenJDKV3P2Installed";
+	private String PREF_IS_INSTALLED_OPENJDK = "isOpenJDKV3P3Installed";
 	private String PREF_OPENJDK_PATCH_VERSION = "latestOpenjdkPatchVersion";
 	
 	private boolean isInitCalled = false;
@@ -287,6 +287,7 @@ public class PojavLoginActivity extends MineActivity
 		}
 		
 		private void unpackOpenJDK(final StringBuilder shellLog, SimpleShellProcess shell, File openjdkTar, boolean isPatch) throws Throwable {
+			/*
 			if (isPatch) {
 				// Backup Old OpenJDK
 				try {
@@ -298,22 +299,26 @@ public class PojavLoginActivity extends MineActivity
 					shell.writeToProcess("mv " + curOpenjdkFolder.getAbsolutePath() + " " + oldOpenjdkFolder.getAbsolutePath());
 				}
 			}
+			*/
 		
 			try {
 				uncompressTarGZ(openjdkTar, new File(Tools.datapath));
-				
+				/*
 				if (isPatch) {
 					// cur -> old: overwrite patch to current OpenJDK
 					shell.writeToProcess("mv " + curOpenjdkFolder.getAbsolutePath() + "/* " + oldOpenjdkFolder.getAbsolutePath());
 					// old -> cur: move to current OpenJDK directory
 					shell.writeToProcess("mv " + oldOpenjdkFolder.getAbsolutePath() + "/* " + curOpenjdkFolder.getAbsolutePath());
 				}
+				*/
 			} catch (Throwable th) {
+				/*
 				if (isPatch) {
 					// If failed, restore to the old one
 					shell.writeToProcess("rm -r " + curOpenjdkFolder);
 					shell.writeToProcess("mv " + oldOpenjdkFolder.getAbsolutePath() + " " + curOpenjdkFolder.getAbsolutePath());
 				}
+				*/
 				throw th;
 			}
 			
