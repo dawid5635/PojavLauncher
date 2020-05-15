@@ -143,6 +143,7 @@ public class PojavLoginActivity extends MineActivity
 		
 		private int deniedCount = -1;
 		private File oldOpenjdkFolder, curOpenjdkFolder;
+		private SimpleShellProcess unpackShell;
 		@Override
 		protected Integer doInBackground(Void[] p1)
 		{
@@ -179,7 +180,7 @@ public class PojavLoginActivity extends MineActivity
 				
 				final StringBuilder shellLog = new StringBuilder();
 				
-				SimpleShellProcess shell = new SimpleShellProcess(new SimpleShellProcess.OnPrintListener(){
+				unpackShell = new SimpleShellProcess(new SimpleShellProcess.OnPrintListener(){
 
 					@Override
 					public void onPrintLine(String text)
@@ -189,7 +190,7 @@ public class PojavLoginActivity extends MineActivity
 					}
 				});
 				
-				shell.initInputStream(PojavLoginActivity.this);
+				unpackShell.initInputStream(PojavLoginActivity.this);
 				if (!firstLaunchPrefs.getBoolean(PREF_IS_INSTALLED_OPENJDK, false)) {
 					// Install OpenJDK
 					publishProgress(null);
@@ -226,7 +227,7 @@ public class PojavLoginActivity extends MineActivity
 						publishProgress("i1", getString(R.string.openjdk_install_unpack_main));
 						shellLog.setLength(0);
 
-						unpackOpenJDK(shellLog, shell, openjdkTar, false);
+						unpackOpenJDK(shellLog, unpackShell, openjdkTar, false);
 						openjdkTar.delete();
 
 						setPref(PREF_IS_INSTALLED_OPENJDK, true);
@@ -256,7 +257,7 @@ public class PojavLoginActivity extends MineActivity
 							DownloadUtils.downloadFile(patchUrl, openjdkTar);
 
 							shellLog.setLength(0);
-							unpackOpenJDK(shellLog, shell, openjdkTar, true);
+							unpackOpenJDK(shellLog, unpackShell, openjdkTar, true);
 							
 							openjdkTar.delete();
 							firstLaunchPrefs.edit().putInt(PREF_OPENJDK_PATCH_VERSION, latestOpenjdkPatchVerInt).commit();
@@ -265,7 +266,7 @@ public class PojavLoginActivity extends MineActivity
 
 					// Grant execute permission
 					
-					shell.writeToProcess("chmod -R 700 " + curOpenjdkFolder.getAbsolutePath());
+					unpackShell.writeToProcess("chmod -R 700 " + curOpenjdkFolder.getAbsolutePath());
 				} catch (final Throwable th) {
 					// Tools.showError(PojavLoginActivity.this, th);
 					runOnUiThread(new Runnable(){
@@ -355,7 +356,10 @@ public class PojavLoginActivity extends MineActivity
 				}
 				publishProgress(null, "Unpacking " + tarEntry.getName());
 				File destPath = new File(dest, tarEntry.getName()); 
-				if (tarEntry.isDirectory()) {
+				if (tarEntry.isSymbolicLink()) {
+					destPath.getParentFile().mkdirs();
+					unpackShell.writeToProcess("ln -s " + tarEntry.getName() + " " + tarEntry.getLinkName());
+				} else if (tarEntry.isDirectory()) {
 					destPath.mkdirs();
 					destPath.setExecutable(true);
 				} else if (!destPath.exists() || destPath.length() != tarEntry.getSize()) {
