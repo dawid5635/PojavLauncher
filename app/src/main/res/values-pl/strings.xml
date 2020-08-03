@@ -50,11 +50,11 @@
 	<string name="alerttitle_installoptifine">Wybierz plik jar OptiFine</string>
 	
 	<!-- Error messages -->
-	<string name="error_checklog">Błąd! Sprawdź dziennik poniżej:% s</string>
+	<string name="error_checklog">Błąd! Sprawdź dziennik poniżej:%s</string>
 	<string name="error_no_version">Brak wersji!</string>
-	<string name="error_load_version">Nie można załadować wersji% s</string>
-	<string name="error_convert_lib">Nie można przekonwertować biblioteki% s</string>
-	<string name="error_convert_client">Nie można przekonwertować% s Minecrafta</string>
+	<string name="error_load_version">Nie można załadować wersji %s</string>
+	<string name="error_convert_lib">Nie można przekonwertować biblioteki %s</string>
+	<string name="error_convert_client">Nie można przekonwertować %s Minecrafta</string>
 	<string name="error_show_more">Pokaż więcej</string>
 	<string name="error_show_less">Pokaż mniej</string>
 	
@@ -67,7 +67,7 @@
 	-->
 	
 	<!-- MCLauncherActivity: Tabs -->
-	<string name="mcl_tab_news">Wiadomości dotyczące programu uruchamiającego</string>
+	<string name="mcl_tab_news">Wiadomości dotyczące Launchera</string>
 	<string name="mcl_tab_console">Konsola programistyczna</string>
 	<string name="mcl_tab_crash">Dziennik awarii</string>
 	
@@ -91,7 +91,7 @@
 	<string name="mcl_option_about">O aplikacji</string>
 	
 	<string name="mcl_setting_title_setmaxdxref">Ustaw maksymalną liczbę referencji DX</string>
-	<string name="mcl_setting_subtitle_setmaxdxref">Zwiększ Jeśli podczas konwersji wystąpił błąd: Za dużo ... odniesień. Możesz spróbować opcji multi-dex. Zalecane: 4096 lub 8192.</string>
+	<string name="mcl_setting_subtitle_setmaxdxref">Zwiększ Jeśli podczas konwersji wystąpił błąd: Za dużo... odniesień. Możesz spróbować opcji multi-dex. Zalecane: 4096 lub 8192.</string>
 	<string name="mcl_setting_title_freeform">Uruchom Minecraft w trybie swobodnym</string>
 	<string name="mcl_setting_subtitle_freeform">Uruchom Minecrafta w pływającym oknie. Wymaga Androida 7.0+</string>
 	<string name="mcl_setting_title_longpresstrigger">Jak długo będzie się uruchamiać po długim naciśnięciu</string>
